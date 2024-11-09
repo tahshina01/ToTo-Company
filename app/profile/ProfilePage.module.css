@@ -1,0 +1,69 @@
+/* app/profile/ProfilePage.module.css */
+.profilePage {
+    background-color: #f0f4f8; /* Global background for the profile page */
+    padding: 0.3rem;
+    min-height: 100vh; /* Ensures the page takes full height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+.profileContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 2rem auto;
+  }
+  
+  .profileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profileImage {
+    width: 150px; /* You can adjust the size */
+    height: 150px; /* Same as width to maintain a square aspect ratio */
+    border-radius: 50%; /* Makes the image round */
+    object-fit: cover; /* Ensures the image covers the circle without distortion */
+    margin-right: 20px;
+    border: 3px solid #333;
+  }
+  
+  .profileInfo h1 {
+    font-size: 2rem;
+    color: #333;
+    margin: 0;
+  }
+  
+  .profession {
+    font-size: 1.2rem;
+    color: #777;
+  }
+  
+  .profileDetails {
+    width: 100%;
+  }
+  
+  .detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .detail strong {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .detail p {
+    color: #666;
+    margin: 0;
+  }
+  

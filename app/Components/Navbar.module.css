@@ -1,0 +1,50 @@
+/* app/Components/Navbar.module.css */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.3rem 1rem;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .logo a {
+    display: flex; /* Flexbox container */
+    align-items: center; 
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+  }
+  .logo img {
+    margin-right: 1rem;
+  }
+  .navLinks {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .navLinks li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+  }
+  
+  .navLinks li a:hover {
+    color: #aaa;
+  }
+  
+  .signIn a {
+  color: #fff;
+  background-color: #757b81; /* Sign in button color */
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.signIn a:hover {
+  background-color: #f9fcff; /* Hover effect */
+}
