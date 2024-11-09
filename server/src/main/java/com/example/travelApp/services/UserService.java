@@ -2,9 +2,6 @@ package com.example.travelApp.services;
 
 import com.example.travelApp.dto.*;
 import com.example.travelApp.models.User;
-import java.util.*;
-
-import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 
 public interface UserService {

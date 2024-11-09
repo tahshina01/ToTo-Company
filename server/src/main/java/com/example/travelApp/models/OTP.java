@@ -19,6 +19,7 @@ public class OTP {
     private int id;
     private String userEmail;
     private String otp;
+    @Enumerated(EnumType.STRING)
     private OtpType type;
     private Timestamp timestamp;
 }

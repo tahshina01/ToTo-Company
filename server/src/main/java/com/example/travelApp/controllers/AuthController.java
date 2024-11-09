@@ -41,4 +41,8 @@ public class AuthController {
         return authenticationService.verifyOtp(request, username, password);
     }
 
+    @GetMapping("/verifyJwtToken")
+    ResponseEntity<String> verifyJwtToken() {
+        return ResponseEntity.ok("Token verified");
+    }
 }
