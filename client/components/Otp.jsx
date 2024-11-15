@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CgPassword } from "react-icons/cg";
 import { useGlobals } from "@/contexts/Globals";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const Otp = ({ setShowOtp }) => {
   const { setToastMessage } = useGlobals();
@@ -13,11 +14,16 @@ const Otp = ({ setShowOtp }) => {
   const [otp, setOtp] = useState("");
   const [timeCount, setTimeCount] = useState(180);
   const [email, setEmail] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const otpObject = JSON.parse(localStorage.getItem("otpObject"));
     if (otpObject) {
-      setEmail(otpObject.signupDto.id);
+      if (otpObject.type === "REGISTER") {
+        setEmail(otpObject.signupDto.id);
+      } else if (otpObject.type === "FORGOT_PASSWORD") {
+        setEmail(otpObject.id);
+      }
 
       // Calculate the time difference between now and the timestamp
       const currentTime = new Date().getTime();
@@ -62,29 +68,43 @@ const Otp = ({ setShowOtp }) => {
     let dataToSend, username, password;
 
     if (otpObject !== undefined && otpObject !== null) {
-      const { signupDto } = otpObject;
-      if (signupDto) {
-        dataToSend = {
-          userEmail: signupDto.id,
-          otp: otp,
-          type: otpObject.type,
-        };
+      dataToSend = {
+        userEmail:
+          otpObject.type === "REGISTER"
+            ? signupDto.id
+            : otpObject.type === "FORGOT_PASSWORD"
+            ? otpObject.id
+            : "",
+        otp: otp,
+        type: otpObject.type,
+      };
+
+      if (otpObject.type === "REGISTER") {
         username = signupDto.name;
         password = signupDto.password;
       }
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verifyOtp?username=${username}&password=${password}`,
-        dataToSend
-      );
+      let response;
+      if (otpObject.type === "REGISTER") {
+        response = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verifyOtp?username=${username}&password=${password}`,
+          dataToSend
+        );
+      } else if (otpObject.type === "FORGOT_PASSWORD") {
+        response = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/forgotPassword`,
+          dataToSend
+        );
+      }
       if (response.status === 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
-        setToastMessage("OTP verified successfully");
+        setToastMessage("OTP verification successfully");
         setShowOtp(false);
         localStorage.removeItem("otpObject");
+        router.push("/");
       }
     } catch (error) {
       console.log("Error:", error);

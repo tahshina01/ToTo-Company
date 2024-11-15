@@ -1,5 +1,9 @@
 // app/profile/page.js
+"use client";
+
 import styles from "./ProfilePage.module.css";
+import { MdEdit } from "react-icons/md";
+import { useState } from "react";
 
 export default function ProfilePage() {
   const user = {
@@ -13,10 +17,10 @@ export default function ProfilePage() {
     imageUrl: "/profile.jpg",
   };
 
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
     <div className={styles.profilePage}>
-      {" "}
-      {/* Apply the background to the whole page */}
       <div className={styles.profileContainer}>
         <div className={styles.profileHeader}>
           <img
@@ -33,7 +37,19 @@ export default function ProfilePage() {
         <div className={styles.profileDetails}>
           <div className={styles.detail}>
             <strong>User ID:</strong>
-            <p>{user.id}</p>
+            {!isEditing && <p>{user.id}</p>}
+            {isEditing && (
+              <input
+                type="text"
+                className="indent-2 rounded-b-none border-b-2 rounded-2xl w-full outline-none font-sans cursor-pointer"
+                placeholder="Enter address"
+                value={address}
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                  setWarning("");
+                }}
+              />
+            )}
           </div>
           <div className={styles.detail}>
             <strong>Username:</strong>
@@ -58,7 +74,16 @@ export default function ProfilePage() {
         </div>
       </div>
       <div className={styles.updateButtonContainer}>
-        <button className={styles.updateProfileBtn}>Update Profile</button>
+        <button className={styles.updateProfileBtn}>
+          {isEditing ? (
+            "Apply Changes"
+          ) : (
+            <div className="flex justify-center items-center gap-2">
+              <MdEdit className="text-xl" />
+              Update
+            </div>
+          )}
+        </button>
       </div>
     </div>
   );

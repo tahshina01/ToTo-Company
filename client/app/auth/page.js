@@ -16,10 +16,14 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import emailjs from "@emailjs/browser";
 import Otp from "@/components/Otp";
+import { useRouter } from "next/navigation";
+import { useGlobals } from "@/contexts/Globals";
 
 export default function Home() {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { setToastMessage } = useGlobals();
+  const router = useRouter();
 
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -66,7 +70,8 @@ export default function Home() {
       if (response.status == 200) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.role);
-        // setToastMessage("Google authentication successful");
+        setToastMessage("Google authentication successful");
+        router.push("/");
       }
     } catch (error) {
       console.log(error);
@@ -138,13 +143,92 @@ export default function Home() {
     }
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!id.includes("@")) {
+      setWarning("Invalid email");
+      return;
+    }
+
+    const postData = {
+      id: id,
+      password: password,
+    };
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`,
+        postData
+      );
+      if (response.status == 200) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("role", response.data.role);
+        setToastMessage("Signed in successfully");
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+      setWarning("Invalid credentials");
+    }
+  };
+
+  const handleForgetPassword = async () => {
+    if (id === "") {
+      setWarning("Please enter your email to get the OTP");
+      return;
+    }
+    try {
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      emailjs
+        .send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+          {
+            to_name: "User",
+            to_email: id,
+            message: `OTP ${otp}`,
+          },
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        )
+        .then(
+          async () => {
+            const res = await axios.post(
+              `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/saveOtp`,
+              {
+                userEmail: id,
+                otp: otp,
+                type: "FORGOT_PASSWORD",
+              }
+            );
+            if (res.status === 200) {
+              const otpObject = {
+                id: id,
+                timestamp: new Date().getTime(),
+                type: "FORGOT_PASSWORD",
+              };
+              localStorage.setItem("otpObject", JSON.stringify(otpObject));
+              setShowOtp(true);
+            }
+          },
+          (error) => {
+            console.log("Error:", error);
+            setWarning("This email doesn't exist");
+          }
+        );
+    } catch (error) {
+      console.log(error);
+      setWarning(`Duplicate email`);
+    }
+  };
+
   return (
     <>
       {showOtp && <Otp setShowOtp={setShowOtp} />}
       <div className={containerClass}>
         <div className="forms-container">
           <div className="signin-signup">
-            <form action="#" className="sign-in-form">
+            <form onSubmit={handleLogin} className="sign-in-form">
               <div
                 style={{
                   display: "flex",
@@ -212,6 +296,7 @@ export default function Home() {
                   color: "green",
                   cursor: "pointer",
                 }}
+                onClick={handleForgetPassword}
               >
                 Forget password? Click here
               </span>

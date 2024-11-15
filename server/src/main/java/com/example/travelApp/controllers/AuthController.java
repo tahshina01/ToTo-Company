@@ -45,4 +45,10 @@ public class AuthController {
     ResponseEntity<String> verifyJwtToken() {
         return ResponseEntity.ok("Token verified");
     }
+
+    @PostMapping("/forgotPassword")
+    public ResponseEntity<JwtAuthResponse> forgotPassword(@RequestBody OTPDto request) {
+        return authenticationService.forgotPassword(request);
+    }
+
 }

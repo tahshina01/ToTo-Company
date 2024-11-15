@@ -69,6 +69,9 @@
 .updateProfileBtn {
   display: flex;
   background-color: #3b3b3b; /* Green background */
+  justify-content: center; /* Center the button horizontally */ /* Space between the profile and button */
+  align-items: center;
+  gap: 0.5rem;
   color: white; /* Text color */
   border: none;
   padding: 0.6rem 2.5rem; /* Button padding */

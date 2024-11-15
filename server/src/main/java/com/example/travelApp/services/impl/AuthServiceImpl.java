@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -153,6 +154,48 @@ public class AuthServiceImpl implements AuthService {
                 }
             }
         }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(JwtAuthResponse.builder()
+                        .error("Wrong OTP")
+                        .build());
+    }
+
+    @Override
+    public ResponseEntity<JwtAuthResponse> forgotPassword(OTPDto request) {
+        System.out.println("Forgot password");
+        List<OTP> otpList = otpRepository.findByUserEmail(request.getUserEmail());
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        for (OTP otp : otpList) {
+            if (currentTime.getTime() - otp.getTimestamp().getTime() > 180000) {
+                otpRepository.delete(otp);
+                if (otp.getOtp().equals(request.getOtp())) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(JwtAuthResponse.builder()
+                                    .error("OTP expired")
+                                    .build());
+                }
+            } else {
+                if (otp.getOtp().equals(request.getOtp()) && otp.getType().equals(request.getType())) {
+                    otpRepository.deleteByUserEmail(request.getUserEmail());
+
+                    Optional<User> user = userRepository.findById(request.getUserEmail());
+                    if (user.isEmpty()) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body(JwtAuthResponse.builder()
+                                        .error("User not found")
+                                        .build());
+                    } else {
+                        var jwt = jwtService.generateToken(user.get());
+                        return ResponseEntity.ok(JwtAuthResponse.builder()
+                                .token(jwt)
+                                .role(Role.USER)
+                                .build());
+                    }
+                }
+            }
+        }
+
+        System.out.println("Wrong OTP");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(JwtAuthResponse.builder()
                         .error("Wrong OTP")

@@ -92,7 +92,13 @@ export default function Navbar() {
         <li>
           <Link href="/profile">Profile</Link>
         </li>
-        <li className={styles.signIn}>
+        <li
+          className={styles.signIn}
+          onClick={() => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+          }}
+        >
           <Link href="/auth">Sign Out</Link>
         </li>
       </ul>
