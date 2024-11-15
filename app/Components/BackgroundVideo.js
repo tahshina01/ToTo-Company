@@ -1,4 +1,5 @@
-// components/BackgroundVideo.js
+// app/Components/BackgroundVideo.js
+
 export default function BackgroundVideo() {
     return (
       <div style={styles.container}>
@@ -8,11 +9,11 @@ export default function BackgroundVideo() {
           muted
           style={styles.video}
         >
-           <source src="/ToToCompany.mp4" type="video/mp4" />
+          <source src="/ToToCompany.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div style={styles.overlay}>
-          {/* Add your content here */}
+          {/* Add your overlay content here */}
         </div>
       </div>
     );
@@ -21,22 +22,19 @@ export default function BackgroundVideo() {
   const styles = {
     container: {
       position: 'relative',
-      minHeight: '120vh',
+      height: '120vh',
       width: '100%',
       overflow: 'hidden',
     },
     video: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        height: 'auto',
-        width: '100%',
-        transform: 'translate(-50%, -50%)',
-        objectFit: 'cover', // Ensures the video fills the container without distortion
-        minHeight: '100%',
-        minWidth: '100%',
-        zIndex: -1,
-      },
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: '100%',
+      width: '100%',
+      objectFit: 'cover',
+      zIndex: -1,
+    },
     overlay: {
       position: 'relative',
       zIndex: 1,
