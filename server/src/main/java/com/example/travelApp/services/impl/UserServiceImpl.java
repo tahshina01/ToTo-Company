@@ -99,12 +99,6 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<User> getUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         if (user != null) {
-            if (user.getAddress() == null) {
-                user.setAddress("");
-            }
-            if (user.getMobile() == null) {
-                user.setMobile("");
-            }
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();

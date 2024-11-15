@@ -87,7 +87,7 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item, idx) => (
           <li
-            className={`max-w-full relative rounded-2xl border border-b-0 flex-shrink-0 border-slate-700 px-3 py-3 sm:px-8 sm:py-6 h-[180px] w-[225px] xs:w-[250px] xs:h-[200px] sm:h-[252px] sm:w-[336px] overflow-hidden`}
+            className={`max-w-full relative rounded-2xl border border-b-0 flex-shrink-0 border-slate-700 px-3 py-3 sm:px-8 sm:py-6 h-[180px] w-[225px] xs:w-[250px] xs:h-[200px] sm:h-[300px] sm:w-[420px] overflow-hidden`}
             style={{
               background:
                 "linear-gradient(180deg, var(--slate-800), var(--slate-900)",
@@ -100,7 +100,7 @@ export const InfiniteMovingCards = ({
               className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
               style={{ display: "block" }} // Ensure the image is treated as a block element
             >
-              <Image src={item.image} alt="img w-full h-full" layout="fill" objectFit="cover" />
+              <Image src={item.image} alt="img w-full h-full sm:h-[300px] sm:w-[420px]" layout="fill" objectFit="cover" />
             </div>
           </li>
         ))}
