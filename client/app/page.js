@@ -5,7 +5,7 @@ import Footer from "./Components/Footer";
 
 export default function Home() {
   return (
-    <div className="bg-[#333]">
+    <div className="bg-[#333] scrollbar-hide">
       <BackgroundVideo />
       <Carousel />
       <Explore />

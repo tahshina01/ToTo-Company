@@ -14,7 +14,8 @@ import java.sql.Timestamp;
 @ToString
 public class Hotel {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

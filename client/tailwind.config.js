@@ -54,6 +54,7 @@ const config = {
     extend: {
       scale: {
         110: "1.1",
+        150: "1.5",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -205,7 +206,13 @@ const config = {
       },
     },
   },
-  plugins: [addVariablesForColors, require("tailwindcss-animate"), daisyui],
+  plugins: [
+    addVariablesForColors,
+    require("tailwindcss-animate"),
+    require("@tailwindcss/line-clamp"),
+    daisyui,
+  ],
+  safelist: ["scrollbar-hide"],
   daisyui: {
     themes: false, // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
     darkTheme: "light", // name of one of the included themes for dark mode

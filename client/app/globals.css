@@ -71,6 +71,9 @@ body {
   }
 }
 
-::-webkit-scrollbar {
-  display: none;
+.card-hover {
+  @apply transition ease-in-out duration-300;
+  &:hover {
+    transform: translateY(-5px);
+  }
 }
