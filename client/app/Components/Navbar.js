@@ -51,7 +51,7 @@ export default function Navbar() {
       }
     };
 
-    verifyJwt(); // Call the function here
+    // verifyJwt(); // Call the function here
   }, []); // Include dependencies
 
   useEffect(() => {

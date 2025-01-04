@@ -1,7 +1,31 @@
+"use client";
+
 import React from "react";
 import { Button } from "@/components/ui/button";
+import RoomDialog from "@/components/dialogs/RoomDialog";
+import axios from "axios";
 
-const RoomCard = () => {
+const RoomCard = ({ dateDiff }) => {
+  const handlePayment = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/payment`,
+        { amount: dateDiff * 1000 },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        window.location.href = response.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="card lg:card-side bg-base-100 shadow-md border-[0.5px] border-t-[0.7px] border-gray-200 card-hover h-[17.4rem]">
       <img
@@ -34,8 +58,10 @@ const RoomCard = () => {
           molestiae neque, nesciunt deserunt?
         </p>
         <div className="card-actions justify-end gap-12">
-          <Button className="font-bold">View Details</Button>
-          <Button className="font-bold">Book Now</Button>
+          <RoomDialog dateDiff={dateDiff} />
+          <Button className="font-bold" onClick={handlePayment}>
+            Book Now
+          </Button>
         </div>
       </div>
     </div>
