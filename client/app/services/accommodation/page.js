@@ -5,6 +5,8 @@ import HotelCard from "@/components/cards/HotelCard";
 import { useState } from "react";
 import Loading from "@/components/Loading";
 import axios from "axios";
+import { FaHome } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const ratings = [-1, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
 
@@ -15,6 +17,7 @@ const page = () => {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [rating, setRating] = useState(-1);
+  const router = useRouter();
 
   useEffect(() => {
     const getHotels = async () => {
@@ -31,7 +34,6 @@ const page = () => {
         if (response.status === 200) {
           setShowLoading(false);
           setHotels(response.data);
-          filteredFilters(response.data);
         }
       } catch (error) {
         console.log(error);
@@ -61,8 +63,20 @@ const page = () => {
   return (
     <div className="w-full overflow-y-auto scrollbar-hide">
       <div
-        className={`w-full flex items-center justify-between bg-gray-700 p-2 pl-4 pr-4 min-h-[4rem] shadow-md shadow-gray-400 rounded-bl-xl`}
+        className={`w-full bg-gray-700 p-4 shadow-md shadow-gray-400 rounded-bl-xl`}
       >
+        <div className="flex w-full items-center justify-between px-6 mb-4">
+          <p className="text-white text-xl font-bold">
+            Find best hotels here during your travel
+          </p>
+          <div
+            className={`flex font-sans text-gray-700 px-3 py-2 rounded-full shadow-md shadow-gray-400 bg-slate-200 hover:bg-slate-300 cursor-pointer items-center w-[13rem]`}
+            onClick={() => router.push("/services/accommodation/yourHotels")}
+          >
+            <FaHome className="text-lg mr-2" />
+            <p className="font-bold truncate text-sm">Your Hotels</p>
+          </div>
+        </div>
         <div className="flex w-full items-center justify-between px-6">
           <input
             type="text"

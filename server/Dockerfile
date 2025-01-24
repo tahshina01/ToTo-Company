@@ -3,6 +3,6 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/quickFood-0.0.1-SNAPSHOT.jar quickFood-0.0.1-SNAPSHOT.jar
+COPY --from=build /target/travelApp-0.0.1-SNAPSHOT.jar travelApp-0.0.1-SNAPSHOT.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","quickFood-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","travelApp-0.0.1-SNAPSHOT.jar"]

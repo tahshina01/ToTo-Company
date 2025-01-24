@@ -88,7 +88,9 @@ export default function ProfilePage() {
         }
       }
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 401) {
+        setToastMessage("Session expired. Please login again");
+      }
     }
   };
 
