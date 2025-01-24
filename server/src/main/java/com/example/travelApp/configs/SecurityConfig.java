@@ -2,6 +2,7 @@ package com.example.travelApp.configs;
 
 import com.example.travelApp.components.AuthEntryPoint;
 import com.example.travelApp.components.JwtAuthFilter;
+import com.example.travelApp.services.impl.JwtServiceImpl;
 import com.example.travelApp.services.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,6 @@ public class SecurityConfig {
     private final UserServiceImpl userService;
     @Autowired
     private final PasswordEncoder passwordEncoder;
-    @Autowired
-    private final AuthEntryPoint authEntryPoint;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -58,7 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/ws/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .authenticationEntryPoint(authEntryPoint))
+                        .authenticationEntryPoint(AuthEntryPoint.getInstance()))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

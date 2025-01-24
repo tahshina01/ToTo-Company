@@ -1,15 +1,8 @@
 package com.example.travelApp.services.impl;
 
-import com.example.travelApp.dto.FileDto;
-import com.example.travelApp.dto.HotelDto;
-import com.example.travelApp.dto.RegHotelDto;
-import com.example.travelApp.models.Hotel;
-import com.example.travelApp.models.HotelDocument;
-import com.example.travelApp.models.User;
-import com.example.travelApp.repositories.HotelDocumentsRepository;
-import com.example.travelApp.repositories.HotelRatingRepository;
-import com.example.travelApp.repositories.HotelRepository;
-import com.example.travelApp.repositories.UserRepository;
+import com.example.travelApp.dto.*;
+import com.example.travelApp.models.*;
+import com.example.travelApp.repositories.*;
 import com.example.travelApp.services.HotelService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +27,10 @@ public class HotelServiceImpl implements HotelService {
     private final HotelRatingRepository hotelRatingRepository;
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final HotelRoomRepository hotelRoomRepository;
+    @Autowired
+    private final RoomImageRepository roomImageRepository;
 
     @Override
     @Transactional
@@ -64,7 +61,14 @@ public class HotelServiceImpl implements HotelService {
         for (Hotel hotel : hotels) {
             if(hotel.getRegDate() != null) {
                 Double rating = hotelRatingRepository.getHotelRating(hotel.getId());
-                HotelDto hotelDto = new HotelDto(hotel.getId(), hotel.getName(), hotel.getAddress(), hotel.getMobile(), hotel.getImage(), rating != null ? rating : -1);
+                HotelDto hotelDto = HotelDto.builder()
+                        .id(hotel.getId())
+                        .name(hotel.getName())
+                        .address(hotel.getAddress())
+                        .mobile(hotel.getMobile())
+                        .image(hotel.getImage())
+                        .rating(rating != null ? rating : -1)
+                        .build();
                 hotelDtoList.add(hotelDto);
             }
         }
@@ -74,7 +78,6 @@ public class HotelServiceImpl implements HotelService {
     @Override
     @Transactional
     public ResponseEntity<String> regHotel(List<MultipartFile> documents, RegHotelDto regHotelDto) throws IOException {
-        System.out.println("Inside service");
         Optional<User> user = userRepository.findById(regHotelDto.getOwner());
         Hotel hotel = Hotel.builder()
                 .name(regHotelDto.getName())
@@ -88,7 +91,6 @@ public class HotelServiceImpl implements HotelService {
         Hotel savedHotel = hotelRepository.save(hotel);
 
         for (MultipartFile document : documents) {
-            System.out.println("Inside loop");
             HotelDocument hotelDocument = HotelDocument.builder()
                     .hotel(savedHotel)
                     .data(document.getBytes())
@@ -96,5 +98,104 @@ public class HotelServiceImpl implements HotelService {
             hotelDocumentRepository.save(hotelDocument);
         }
         return ResponseEntity.ok("Registered successfully");
+    }
+
+    @Override
+    public ResponseEntity<String> editHotel(HotelDto hotelDto) {
+        Hotel existingHotel = hotelRepository.findById(hotelDto.getId())
+                .orElseThrow(() -> new RuntimeException("Hotel not found"));
+        if (existingHotel != null) {
+            if (hotelDto.getImage() == null) {
+                hotelDto.setImage(existingHotel.getImage());
+            }
+            Hotel hotel = new Hotel(hotelDto.getId(), hotelDto.getName(), existingHotel.getOwner(), hotelDto.getAddress(), hotelDto.getMobile(), existingHotel.getRegDate(), hotelDto.getImage());
+            hotelRepository.save(hotel);
+            return ResponseEntity.ok("Hotel updated");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> addRoom(List<MultipartFile> documents, RoomDto roomDto) throws IOException {
+        Optional<Hotel> hotel = hotelRepository.findById(roomDto.getHotelId());
+        HotelRoom room = HotelRoom.builder()
+                .hotel(hotel.get())
+                .roomNumber(roomDto.getRoomNumber())
+                .roomType(roomDto.getRoomType())
+                .price(roomDto.getPrice())
+                .description(roomDto.getDescription())
+                .build();
+
+        hotelRoomRepository.save(room);
+
+        for (MultipartFile document : documents) {
+            RoomImage roomImage = RoomImage.builder()
+                    .hotelRoom(room)
+                    .data(document.getBytes())
+                    .build();
+            roomImageRepository.save(roomImage);
+        }
+        return ResponseEntity.ok("Room added successfully");
+    }
+
+    @Override
+    public ResponseEntity<List<GetRoomDto>> getRoomsByHotelId(int hotelId) {
+        List<HotelRoom> rooms = hotelRoomRepository.findByHotelId(hotelId);
+        List<GetRoomDto> roomDtoList = new ArrayList<>();
+        for (HotelRoom room : rooms) {
+            List<RoomImage> images = roomImageRepository.findByHotelRoomId(room.getId());
+            List<FileDto> imageList = new ArrayList<>();
+            for (RoomImage image : images) {
+                FileDto fileDto = FileDto.builder()
+                        .id(image.getId())
+                        .data(image.getData())
+                        .fileType("image")
+                        .build();
+                imageList.add(fileDto);
+            }
+            GetRoomDto roomDto = GetRoomDto.builder()
+                    .id(room.getId())
+                    .roomNumber(room.getRoomNumber())
+                    .hotelId(room.getHotel().getId())
+                    .roomType(room.getRoomType())
+                    .price(room.getPrice())
+                    .description(room.getDescription())
+                    .images(imageList)
+                    .build();
+            roomDtoList.add(roomDto);
+        }
+        return ResponseEntity.ok(roomDtoList);
+    }
+
+    @Override
+    public ResponseEntity<String> editRoom(List<MultipartFile> documents, RoomDto roomDto) throws IOException {
+        Optional<Hotel> hotel = hotelRepository.findById(roomDto.getHotelId());
+        HotelRoom room = HotelRoom.builder()
+                .id(roomDto.getId())
+                .hotel(hotel.get())
+                .roomNumber(roomDto.getRoomNumber())
+                .roomType(roomDto.getRoomType())
+                .price(roomDto.getPrice())
+                .description(roomDto.getDescription())
+                .build();
+        hotelRoomRepository.save(room);
+
+        List<Integer> prevAttachments = roomImageRepository.getPrevFilesByRoomId(roomDto.getId());
+        for (Integer prevAttachment : prevAttachments) {
+            if (!roomDto.getPrevImages().contains(prevAttachment)) {
+                roomImageRepository.deleteById(prevAttachment);
+            }
+        }
+
+        for (MultipartFile document : documents) {
+            RoomImage roomImage = RoomImage.builder()
+                    .hotelRoom(room)
+                    .data(document.getBytes())
+                    .build();
+            roomImageRepository.save(roomImage);
+        }
+
+        return ResponseEntity.ok("Room updated successfully");
     }
 }

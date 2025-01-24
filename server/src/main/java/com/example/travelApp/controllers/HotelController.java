@@ -1,9 +1,6 @@
 package com.example.travelApp.controllers;
 
-import com.example.travelApp.dto.FileDto;
-import com.example.travelApp.dto.HotelDto;
-import com.example.travelApp.dto.Payment;
-import com.example.travelApp.dto.RegHotelDto;
+import com.example.travelApp.dto.*;
 import com.example.travelApp.services.impl.HotelServiceImpl;
 import com.example.travelApp.services.impl.PaymentServiceImpl;
 import com.stripe.exception.StripeException;
@@ -31,12 +28,10 @@ public class HotelController {
                                                    @RequestParam (value = "file", required = false) MultipartFile file,
                                                    @ModelAttribute RegHotelDto regHotelDto) {
         try {
-            System.out.println("Inside controller");
             List<MultipartFile> documents = new ArrayList<>();
             if (files != null) {
                 for (MultipartFile f : files) {
                     if (!f.isEmpty()) {
-                        System.out.println("Inside document");
                         documents.add(f);
                     }
                 }
@@ -49,6 +44,63 @@ public class HotelController {
             e.printStackTrace();
             return ResponseEntity.status(500).build();
         }
+    }
+
+    @PostMapping("/editHotel")
+    public ResponseEntity<String> editHotel(@RequestParam (value = "file", required = false) MultipartFile file,
+                                           @ModelAttribute HotelDto hotelDto) {
+        try {
+            if (file != null && !file.isEmpty()) {
+                hotelDto.setImage(file.getBytes());
+            }
+            return hotelService.editHotel(hotelDto);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @PostMapping("/addRoom")
+    public ResponseEntity<String> addRoom(@RequestParam(value = "attachments", required = false) MultipartFile[] files,
+                                          @ModelAttribute RoomDto roomDto) {
+        try {
+            List<MultipartFile> documents = new ArrayList<>();
+            if (files != null) {
+                for (MultipartFile f : files) {
+                    if (!f.isEmpty()) {
+                        documents.add(f);
+                    }
+                }
+            }
+            return hotelService.addRoom(documents, roomDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @PostMapping("/editRoom")
+    public ResponseEntity<String> editRoom(@RequestParam(value = "attachments", required = false) MultipartFile[] files,
+                                          @ModelAttribute RoomDto roomDto) {
+        try {
+            List<MultipartFile> documents = new ArrayList<>();
+            if (files != null) {
+                for (MultipartFile f : files) {
+                    if (!f.isEmpty()) {
+                        documents.add(f);
+                    }
+                }
+            }
+            return hotelService.editRoom(documents, roomDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping("/getRoomsByHotelId")
+    public ResponseEntity<List<GetRoomDto>> getRoomsByHotelId(@RequestParam int hotelId) {
+        return hotelService.getRoomsByHotelId(hotelId);
     }
 
     @GetMapping("/getHotels")

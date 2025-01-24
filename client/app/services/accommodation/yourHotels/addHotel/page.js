@@ -11,7 +11,7 @@ import PreviewItem from "@/app/Components/PreviewItem";
 import { IoMdAddCircle } from "react-icons/io";
 import { useRouter } from "next/navigation";
 
-const UserData = ({ label, value, flag, setValue, setWarning }) => {
+export const UserData = ({ label, value, flag, setValue, setWarning }) => {
   return (
     <div className={styles.detail}>
       <strong>
@@ -110,7 +110,7 @@ export default function AddHotelPage() {
 
   return (
     <form className={styles.profilePage} encType="multipart/form-data">
-      <div className={styles.profileContainer}>
+      <div className={styles.profileContainer} style={{ minWidth: "600px" }}>
         <div className={styles.profileHeader}>
           <div className={`relative ${isEditing ? "" : "mr-5"}`}>
             {imgStream !== "" ? (

@@ -20,7 +20,7 @@ public class HotelRoom {
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
 
-    private String name;
+    private int roomNumber;
 
     @Enumerated(EnumType.STRING)
     private RoomType roomType;
