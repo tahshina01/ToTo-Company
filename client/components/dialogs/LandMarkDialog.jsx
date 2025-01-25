@@ -11,16 +11,12 @@ import {
 } from "@/components/ui/dialog";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useGlobals } from "@/contexts/Globals";
 
-const AdminHotelDialog = ({ hotel }) => {
-  const buttonRef = useRef(null);
+const LandMarkDialog = ({ landmark, buttonRef }) => {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState("right"); // Slide direction
   const imageRef = useRef([]);
-  const { setToastMessage } = useGlobals();
 
   const handleNext = () => {
     setDirection("right");
@@ -53,13 +49,13 @@ const AdminHotelDialog = ({ hotel }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="font-bold" ref={buttonRef}>
-          Details
+        <Button className="hidden" ref={buttonRef}>
+          View Details
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[450px] max-h-[96svh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Hotel Details</DialogTitle>
+          <DialogTitle>Landmark Details</DialogTitle>
         </DialogHeader>
         <div className="max-w-[400px] flex mx-auto overflow-hidden relative mb-[6px]">
           <div
@@ -70,12 +66,12 @@ const AdminHotelDialog = ({ hotel }) => {
               transform: `translateX(-${index * 100}%)`,
             }}
           >
-            {hotel.documents.map((image, i) => (
+            {landmark.images.map((image, i) => (
               <img
                 key={i}
+                src={`data:image/jpeg;base64,${image.data}`}
                 ref={(element) => (imageRef.current[i] = element)}
                 onClick={() => toggleFullscreen(imageRef.current[i])}
-                src={`data:image/jpeg;base64,${image.data}`}
                 alt={`Slide ${i}`}
                 className="min-w-full h-[250px] rounded-md"
               />
@@ -89,7 +85,7 @@ const AdminHotelDialog = ({ hotel }) => {
               {"<"}
             </div>
           )}
-          {index < hotel.documents.length - 1 && (
+          {index < landmark.images.length - 1 && (
             <div
               onClick={handleNext}
               className="text-2xl font-bold rounded-full w-10 h-10 flex justify-center items-center absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-200 cursor-pointer"
@@ -98,72 +94,26 @@ const AdminHotelDialog = ({ hotel }) => {
             </div>
           )}
         </div>
+        <div className="text-[1.2rem]">
+          <span className="font-bold">{landmark.name}</span>
+        </div>
+        <p>{landmark.description}</p>
         <div className="text-[1rem]">
-          <span className="font-semibold">Name : </span>
-          {hotel.name}
+          <span className="font-semibold">Location : </span>
+          {landmark.location}
         </div>
         <div className="text-[1rem]">
-          <span className="font-semibold">Owner : </span>
-          {hotel.owner}
-        </div>
-        <div className="text-[1rem]">
-          <span className="font-semibold">Address : </span>
-          {hotel.address}
-        </div>
-        <div className="text-[1rem]">
-          <span className="font-semibold">Mobile : </span>
-          {hotel.mobile}
+          <span className="font-semibold">Category : </span>
+          {landmark.type}
         </div>
         <DialogFooter>
           <Button
             className="w-[6rem] font-bold"
-            onClick={async () => {
-              try {
-                const response = await axios.post(
-                  `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/acceptRegistration?id=${hotel.id}`,
-                  {},
-                  {
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                  }
-                );
-                if (response.status == 200) {
-                  setToastMessage("Hotel Accepted");
-                  buttonRef.current.click();
-                  window.location.reload();
-                }
-              } catch (error) {
-                console.log("Error:", error);
-              }
+            onClick={() => {
+              buttonRef.current.click();
             }}
           >
-            Accept
-          </Button>
-          <Button
-            className="w-[6rem] font-bold"
-            onClick={async () => {
-              try {
-                const response = await axios.post(
-                  `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/rejectRegistration?id=${hotel.id}`,
-                  {},
-                  {
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                  }
-                );
-                if (response.status == 200) {
-                  setToastMessage("Hotel Rejected");
-                  buttonRef.current.click();
-                  window.location.reload();
-                }
-              } catch (error) {
-                console.log("Error:", error);
-              }
-            }}
-          >
-            Reject
+            Close
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -171,4 +121,4 @@ const AdminHotelDialog = ({ hotel }) => {
   );
 };
 
-export default AdminHotelDialog;
+export default LandMarkDialog;

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import LandMarkCard from "@/components/cards/LandMarkCard";
 import { useState } from "react";
 import Loading from "@/components/Loading";
@@ -8,18 +8,20 @@ import axios from "axios";
 import { IoMdAddCircle } from "react-icons/io";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
+import AddLandMarkDialog from "@/components/dialogs/AddLandMarkDialog";
 
 const LandmarksPage = () => {
   const [landmarks, setLandmarks] = useState([]);
   const [showLoading, setShowLoading] = useState(true);
   const router = useRouter();
+  const dialogRef = useRef(null);
 
   useEffect(() => {
     const getLandmarks = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/landmark/getLandmarks`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/landmark/getAll`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -48,15 +50,14 @@ const LandmarksPage = () => {
           </p>
           <div
             className={`flex font-sans text-gray-700 px-3 py-2 rounded-full shadow-md shadow-gray-400 bg-slate-200 hover:bg-slate-300 cursor-pointer items-center w-[13rem]`}
+            onClick={() => dialogRef.current.click()}
           >
             <IoMdAddCircle className="text-lg mr-2" />
             <p className="font-bold truncate text-sm">Add New Landmark</p>
           </div>
         </div>
       </div>
-      <div
-        className={`px-4 py-5 grid grid-cols-4 gap-x-2 gap-y-5 max-w-[1350px] mx-auto`}
-      >
+      <div className={`px-4 py-5 max-w-[1050px] mx-auto`}>
         {landmarks.length !== 0 &&
           landmarks.map((landmark) => (
             <div key={landmark.id} className="w-full flex justify-center">
@@ -74,6 +75,7 @@ const LandmarksPage = () => {
           You haven't added any landmarks yet.
         </div>
       )}
+      <AddLandMarkDialog dialogRef={dialogRef} isEdit={false} />
     </div>
   );
 };

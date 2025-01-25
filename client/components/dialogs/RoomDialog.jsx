@@ -17,6 +17,7 @@ const RoomDialog = ({ dateDiff, room }) => {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState("right"); // Slide direction
+  const imageRef = useRef([]);
 
   const handleNext = () => {
     setDirection("right");
@@ -26,6 +27,24 @@ const RoomDialog = ({ dateDiff, room }) => {
   const handlePrev = () => {
     setDirection("left");
     setIndex((prevIndex) => prevIndex - 1);
+  };
+
+  const toggleFullscreen = (imageElement) => {
+    if (!document.fullscreenElement) {
+      if (imageElement.requestFullscreen) {
+        imageElement.requestFullscreen();
+      } else if (imageElement.mozRequestFullScreen) {
+        imageElement.mozRequestFullScreen();
+      } else if (imageElement.webkitRequestFullscreen) {
+        imageElement.webkitRequestFullscreen();
+      } else if (imageElement.msRequestFullscreen) {
+        imageElement.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
   };
 
   return (
@@ -52,6 +71,8 @@ const RoomDialog = ({ dateDiff, room }) => {
               <img
                 key={i}
                 src={`data:image/jpeg;base64,${image.data}`}
+                ref={(element) => (imageRef.current[i] = element)}
+                onClick={() => toggleFullscreen(imageRef.current[i])}
                 alt={`Slide ${i}`}
                 className="min-w-full h-[250px] rounded-md"
               />
