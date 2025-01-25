@@ -19,8 +19,4 @@ public class LandMark {
     private String description;
     private String location;
     private String type;
-
-    @Lob
-    @Column(name = "image", columnDefinition = "LONGBLOB")
-    protected byte[] image;
 }

@@ -31,4 +31,10 @@ public interface HotelService {
     ResponseEntity<String> acceptRegistration(int id);
 
     ResponseEntity<String> rejectRegistration(int id);
+
+    ResponseEntity<BookingData> getBookingsByUserId(String userId);
+
+    ResponseEntity<String> cancelBooking(int bookingId);
+
+    ResponseEntity<String> rateHotel(RateDto rateDto);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Repository
 public interface HotelBookingsRepository extends JpaRepository<HotelBookings, Integer> {
@@ -17,4 +18,6 @@ public interface HotelBookingsRepository extends JpaRepository<HotelBookings, In
     boolean existsByRoomIdAndDateRange(@Param("roomId") int roomId,
                                        @Param("fromDate") Timestamp fromDate,
                                        @Param("toDate") Timestamp toDate);
+
+    List<HotelBookings> findByUserId(String userId);
 }

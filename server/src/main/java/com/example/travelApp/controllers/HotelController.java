@@ -142,4 +142,20 @@ public class HotelController {
     ResponseEntity<String> rejectRegistration(@RequestParam int id) {
         return hotelService.rejectRegistration(id);
     }
+
+    @GetMapping("/getBookingsByUserId")
+    public ResponseEntity<BookingData> getBookingsByUserId(@RequestParam String userId) {
+        System.out.println(userId);
+        return hotelService.getBookingsByUserId(userId);
+    }
+
+    @DeleteMapping("/cancelBooking")
+    public ResponseEntity<String> cancelBooking(@RequestParam int bookingId) {
+        return hotelService.cancelBooking(bookingId);
+    }
+
+    @PostMapping("/rateHotel")
+    public ResponseEntity<String> rateHotel(@RequestBody RateDto rateDto) {
+        return hotelService.rateHotel(rateDto);
+    }
 }

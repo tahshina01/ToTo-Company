@@ -5,7 +5,7 @@ import styles from "./Navbar.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGlobals } from "@/contexts/Globals";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { toastRef, toastMessage, setToastMessage } = useGlobals();
   const router = useRouter();
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     const verifyJwt = async () => {
@@ -52,6 +53,8 @@ export default function Navbar() {
     };
 
     verifyJwt(); // Call the function here
+    const role = localStorage.getItem("role");
+    setUser(role);
   }, []); // Include dependencies
 
   useEffect(() => {
@@ -97,7 +100,9 @@ export default function Navbar() {
           <Link href="/contact">Contact</Link>
         </li>
         <li>
-          <Link href="/profile">Profile</Link>
+          <Link href={user === "ADMIN" ? "/account/profile" : "/account"}>
+            Account
+          </Link>
         </li>
         <button
           className="card-hover"

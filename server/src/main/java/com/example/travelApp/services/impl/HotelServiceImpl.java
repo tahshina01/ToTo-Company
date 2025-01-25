@@ -321,4 +321,55 @@ public class HotelServiceImpl implements HotelService {
         return ResponseEntity.ok("Hotel registration rejected");
     }
 
+    @Override
+    public ResponseEntity<BookingData> getBookingsByUserId(String userId) {
+        List<HotelBookings> bookings = hotelBookingsRepository.findByUserId(userId);
+        List<BookingDto2> currentBookingDtoList = new ArrayList<>();
+        List<BookingDto2> pastBookingDtoList = new ArrayList<>();
+        for (HotelBookings booking : bookings) {
+            Hotel hotel = hotelRepository.findById(booking.getHotelId()).orElseThrow(() -> new RuntimeException("Hotel not found"));
+            HotelRoom room = hotelRoomRepository.findById(booking.getRoomId()).orElseThrow(() -> new RuntimeException("Room not found"));
+            BookingDto2 bookingDto = BookingDto2.builder()
+                    .id(booking.getId())
+                    .hotelId(hotel.getId())
+                    .hotelName(hotel.getName())
+                    .roomType(room.getRoomType())
+                    .fromDate(booking.getFromDate().toString())
+                    .toDate(booking.getToDate().toString())
+                    .totalAmount(booking.getTotalAmount())
+                    .image(hotel.getImage())
+                    .hotelAddress(hotel.getAddress())
+                    .build();
+            if (booking.getToDate().before(new Timestamp(System.currentTimeMillis()))) {
+                pastBookingDtoList.add(bookingDto);
+            } else {
+                currentBookingDtoList.add(bookingDto);
+            }
+        }
+        return ResponseEntity.ok(BookingData.builder()
+                .currentBookings(currentBookingDtoList)
+                .pastBookings(pastBookingDtoList)
+                .build());
+    }
+
+    @Override
+    public ResponseEntity<String> cancelBooking(int bookingId) {
+        hotelBookingsRepository.deleteById(bookingId);
+        return ResponseEntity.ok("Booking cancelled");
+    }
+
+    @Override
+    public ResponseEntity<String> rateHotel(RateDto rateDto) {
+        Optional<User> user = userRepository.findById(rateDto.getUserId());
+        Optional<Hotel> hotel = hotelRepository.findById(rateDto.getHotelId());
+        HotelRating rating = HotelRating.builder()
+                .hotel(hotel.get())
+                .user(user.get())
+                .rating(rateDto.getRating())
+                .build();
+        hotelRatingRepository.save(rating);
+        hotelBookingsRepository.deleteById(rateDto.getBookingId());
+        return ResponseEntity.ok("Hotel rated");
+    }
+
 }
