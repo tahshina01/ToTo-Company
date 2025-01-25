@@ -4,6 +4,7 @@ import com.example.travelApp.dto.*;
 import com.example.travelApp.services.impl.HotelServiceImpl;
 import com.example.travelApp.services.impl.PaymentServiceImpl;
 import com.stripe.exception.StripeException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/hotel")
 @CrossOrigin
+@RequiredArgsConstructor
 public class HotelController {
     @Autowired
     private HotelServiceImpl hotelService;

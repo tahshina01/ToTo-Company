@@ -2,7 +2,7 @@ package com.example.travelApp.controllers;
 
 import com.example.travelApp.dto.LoginDto;
 import com.example.travelApp.dto.UpdateProfileDto;
-import com.example.travelApp.facade.UserFacade;
+import com.example.travelApp.facade.UserFacadeImpl;
 import com.example.travelApp.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserFacade userFacade;
+    private final UserFacadeImpl userFacade;
 
     @PutMapping("/updateProfile")
     public ResponseEntity<String> updateUser(@RequestParam(value = "file", required = false) MultipartFile file,
