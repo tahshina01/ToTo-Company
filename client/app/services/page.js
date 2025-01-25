@@ -1,10 +1,17 @@
 // app/services/page.js
 "use client";
+import { useEffect, useState } from "react";
 import styles from "./ServicesPage.module.css";
 import { useRouter } from "next/navigation";
 
 export default function ServicesPage() {
   const router = useRouter();
+  const [user, setUser] = useState("");
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    setUser(role);
+  }, []);
+
   const services = [
     {
       title: "Travel",
@@ -37,12 +44,29 @@ export default function ServicesPage() {
 
       <div className={styles.servicesGrid}>
         {services.map((service, index) => (
-          <div key={index} className={styles.serviceCard}>
+          <div
+            key={index}
+            className={
+              user === "ADMIN" && index === 0 ? "hidden" : styles.serviceCard
+            }
+          >
             <img src={service.imageUrl} alt={service.title} />
             <div className={styles.serviceCardContent}>
               <h2>{service.title}</h2>
               <p>{service.description}</p>
-              <button onClick={() => router.push(service.link)}>
+              <button
+                onClick={() => {
+                  if (user === "ADMIN") {
+                    if (index === 1) {
+                      router.push("/admin/hotels");
+                    } else {
+                      router.push("/admin/landmarks");
+                    }
+                  } else {
+                    router.push(service.link);
+                  }
+                }}
+              >
                 Learn More
               </button>
             </div>

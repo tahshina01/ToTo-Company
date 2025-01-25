@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useGlobals } from "@/contexts/Globals";
 import Accommodation from "@/public/accomodation.jpg";
 import EditHotelDialog from "@/components/dialogs/EditHotelDialog";
+import AdminHotelDialog from "@/components/dialogs/AdminHotelDialog";
 
 const HotelCard = ({ hotel }) => {
   const router = useRouter();
@@ -20,9 +21,11 @@ const HotelCard = ({ hotel }) => {
 
   return (
     <div
-      className={`w-full max-w-[19.4rem] h-[16.8rem] rounded-lg shadow-md bg-base-100 border-2 border-gray-200 cursor-pointer card-hover`}
+      className={`w-full max-w-[19.4rem] ${
+        pathname.includes("/admin") ? "h-[17.2rem]" : "h-[16.8rem]"
+      } rounded-lg shadow-md bg-base-100 border-2 border-gray-200 cursor-pointer card-hover`}
       onClick={() => {
-        if (!pathname.includes("/yourHotels")) {
+        if (!pathname.includes("/yourHotels") && !pathname.includes("/admin")) {
           handleNavigate();
         }
       }}
@@ -47,7 +50,7 @@ const HotelCard = ({ hotel }) => {
       <p className="text-sm text-gray-600 mt-1 pl-3 pr-3 truncate">
         {hotel.address ? hotel.address : "No Address"}
       </p>
-      {!pathname.includes("/yourHotels") && (
+      {!pathname.includes("/yourHotels") && !pathname.includes("/admin") && (
         <div className="mt-1 flex gap-1 w-[5rem] justify-center items-center font-bold text-white bg-green-700 ml-auto rounded-sm text-sm pt-1 pb-1 mr-3 mb-2">
           {hotel.rating === -1 ? (
             <p className="text-[0.75rem] truncate">No Rating</p>
@@ -67,6 +70,11 @@ const HotelCard = ({ hotel }) => {
             Details
           </button>
           <EditHotelDialog hotel={hotel} />
+        </div>
+      )}
+      {pathname.includes("/admin") && (
+        <div className="flex items-center w-full justify-end px-3 my-2">
+          <AdminHotelDialog hotel={hotel} />
         </div>
       )}
     </div>

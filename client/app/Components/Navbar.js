@@ -68,7 +68,9 @@ export default function Navbar() {
   return (
     <nav
       className={styles.navbar}
-      style={pathname === "/auth" ? { display: "none" } : {}}
+      style={
+        pathname === "/auth" || pathname === "/admin" ? { display: "none" } : {}
+      }
     >
       <div style={{ display: "none" }}>
         <Toast />

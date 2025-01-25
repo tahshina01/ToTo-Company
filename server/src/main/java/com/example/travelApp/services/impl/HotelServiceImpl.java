@@ -269,4 +269,56 @@ public class HotelServiceImpl implements HotelService {
         return ResponseEntity.ok("Booked successfully");
     }
 
+    @Override
+    public ResponseEntity<List<AdminHotelDto>> getUnregisteredHotels() {
+        List<Hotel> hotels = hotelRepository.findByRegDateIsNull();
+        List<AdminHotelDto> hotelDtoList = new ArrayList<>();
+        for (Hotel hotel : hotels) {
+            List<HotelDocument> documents = hotelDocumentRepository.findByHotelId(hotel.getId());
+            List<FileDto> documentList = new ArrayList<>();
+            for (HotelDocument document : documents) {
+                FileDto fileDto = FileDto.builder()
+                        .id(document.getId())
+                        .data(document.getData())
+                        .fileType("image")
+                        .build();
+                documentList.add(fileDto);
+            }
+            AdminHotelDto hotelDto = AdminHotelDto.builder()
+                    .id(hotel.getId())
+                    .name(hotel.getName())
+                    .owner(hotel.getOwner().getId())
+                    .address(hotel.getAddress())
+                    .mobile(hotel.getMobile())
+                    .rating(-1)
+                    .image(hotel.getImage())
+                    .documents(documentList)
+                    .build();
+            hotelDtoList.add(hotelDto);
+        }
+        return ResponseEntity.ok(hotelDtoList);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<String> acceptRegistration(int id) {
+        Optional<Hotel> hotel = hotelRepository.findById(id);
+        if (hotel.isPresent()) {
+            hotel.get().setRegDate(new Timestamp(System.currentTimeMillis()));
+            hotelRepository.save(hotel.get());
+            hotelDocumentRepository.deleteByHotelId(id);
+            return ResponseEntity.ok("Hotel registration accepted");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<String> rejectRegistration(int id) {
+        hotelDocumentRepository.deleteByHotelId(id);
+        hotelRepository.deleteById(id);
+        return ResponseEntity.ok("Hotel registration rejected");
+    }
+
 }

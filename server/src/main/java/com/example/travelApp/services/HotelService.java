@@ -25,4 +25,10 @@ public interface HotelService {
     ResponseEntity<List<GetRoomDto>> getUnbookedRooms(int hotelId, String fromDate, String toDate);
 
     ResponseEntity<String> booking(BookingDto bookingDto);
+
+    ResponseEntity<List<AdminHotelDto>> getUnregisteredHotels();
+
+    ResponseEntity<String> acceptRegistration(int id);
+
+    ResponseEntity<String> rejectRegistration(int id);
 }

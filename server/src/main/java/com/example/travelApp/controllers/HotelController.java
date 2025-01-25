@@ -127,4 +127,19 @@ public class HotelController {
     ResponseEntity<String> booking(@RequestBody BookingDto bookingDto) {
         return hotelService.booking(bookingDto);
     }
+
+    @GetMapping("/getUnregisteredHotels")
+    ResponseEntity<List<AdminHotelDto>> getUnregisteredHotels() {
+        return hotelService.getUnregisteredHotels();
+    }
+
+    @PostMapping("/acceptRegistration")
+    ResponseEntity<String> acceptRegistration(@RequestParam int id) {
+        return hotelService.acceptRegistration(id);
+    }
+
+    @PostMapping("/rejectRegistration")
+    ResponseEntity<String> rejectRegistration(@RequestParam int id) {
+        return hotelService.rejectRegistration(id);
+    }
 }
