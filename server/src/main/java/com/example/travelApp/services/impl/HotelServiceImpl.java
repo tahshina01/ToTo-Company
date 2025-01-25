@@ -7,11 +7,13 @@ import com.example.travelApp.services.HotelService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,8 @@ public class HotelServiceImpl implements HotelService {
     private final HotelRoomRepository hotelRoomRepository;
     @Autowired
     private final RoomImageRepository roomImageRepository;
+    @Autowired
+    private final HotelBookingsRepository hotelBookingsRepository;
 
     @Override
     @Transactional
@@ -198,4 +202,71 @@ public class HotelServiceImpl implements HotelService {
 
         return ResponseEntity.ok("Room updated successfully");
     }
+
+    @Override
+    public ResponseEntity<List<GetRoomDto>> getUnbookedRooms(int hotelId, String fromDate, String toDate) {
+        try {
+            // Parse the dates from strings to Timestamp
+            System.out.println("service");
+            Timestamp fromTimestamp = Timestamp.valueOf(fromDate);
+            Timestamp toTimestamp = Timestamp.valueOf(toDate);
+            System.out.println("service format");
+
+            // Fetch all rooms for the given hotel
+            List<HotelRoom> rooms = hotelRoomRepository.findByHotelId(hotelId);
+            List<GetRoomDto> roomDtoList = new ArrayList<>();
+
+            for (HotelRoom room : rooms) {
+                System.out.println("before query");
+                // Check if the room is booked within the given date range
+                boolean isBooked = hotelBookingsRepository.existsByRoomIdAndDateRange(
+                        room.getId(),
+                        fromTimestamp,
+                        toTimestamp
+                );
+                System.out.println("after query");
+
+                if (!isBooked) { // If not booked, include it in the result
+                    List<RoomImage> images = roomImageRepository.findByHotelRoomId(room.getId());
+                    List<FileDto> imageList = new ArrayList<>();
+                    for (RoomImage image : images) {
+                        FileDto fileDto = FileDto.builder()
+                                .id(image.getId())
+                                .data(image.getData())
+                                .fileType("image")
+                                .build();
+                        imageList.add(fileDto);
+                    }
+                    GetRoomDto roomDto = GetRoomDto.builder()
+                            .id(room.getId())
+                            .roomNumber(room.getRoomNumber())
+                            .hotelId(room.getHotel().getId())
+                            .roomType(room.getRoomType())
+                            .price(room.getPrice())
+                            .description(room.getDescription())
+                            .images(imageList)
+                            .build();
+                    roomDtoList.add(roomDto);
+                }
+            }
+            return ResponseEntity.ok(roomDtoList);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> booking(BookingDto bookingDto) {
+        HotelBookings booking = HotelBookings.builder()
+                .roomId(bookingDto.getRoomId())
+                .userId(bookingDto.getUserId())
+                .hotelId(bookingDto.getHotelId())
+                .fromDate(Timestamp.valueOf(bookingDto.getFromDate()))
+                .toDate(Timestamp.valueOf(bookingDto.getToDate()))
+                .totalAmount(bookingDto.getTotalAmount())
+                .build();
+        hotelBookingsRepository.save(booking);
+        return ResponseEntity.ok("Booked successfully");
+    }
+
 }

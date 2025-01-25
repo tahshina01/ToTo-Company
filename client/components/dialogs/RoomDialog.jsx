@@ -12,7 +12,7 @@ import {
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const RoomDialog = ({ dateDiff }) => {
+const RoomDialog = ({ dateDiff, room }) => {
   const buttonRef = useRef(null);
   const router = useRouter();
   const [index, setIndex] = useState(0);
@@ -27,19 +27,6 @@ const RoomDialog = ({ dateDiff }) => {
     setDirection("left");
     setIndex((prevIndex) => prevIndex - 1);
   };
-
-  const images = [
-    "/tourist_spot_1.jpeg",
-    "/tourist_spot_2.jpeg",
-    "/tourist_spot_3.jpeg",
-    "/tourist_spot_4.jpeg",
-    "/tourist_spot_5.jpeg",
-    "/tourist_spot_6.jpeg",
-    "/tourist_spot_7.jpeg",
-    "/tourist_spot_8.jpeg",
-    "/tourist_spot_9.jpeg",
-    "/tourist_spot_10.jpeg",
-  ];
 
   return (
     <Dialog>
@@ -61,10 +48,10 @@ const RoomDialog = ({ dateDiff }) => {
               transform: `translateX(-${index * 100}%)`,
             }}
           >
-            {images.map((image, i) => (
+            {room.images.map((image, i) => (
               <img
                 key={i}
-                src={image}
+                src={`data:image/jpeg;base64,${image.data}`}
                 alt={`Slide ${i}`}
                 className="min-w-full h-[250px] rounded-md"
               />
@@ -78,7 +65,7 @@ const RoomDialog = ({ dateDiff }) => {
               {"<"}
             </div>
           )}
-          {index < images.length - 1 && (
+          {index < room.images.length - 1 && (
             <div
               onClick={handleNext}
               className="text-2xl font-bold rounded-full w-10 h-10 flex justify-center items-center absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-200 cursor-pointer"
@@ -87,18 +74,10 @@ const RoomDialog = ({ dateDiff }) => {
             </div>
           )}
         </div>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea iste
-          nihil nobis labore veritatis amet nostrum, excepturi aliquid unde,
-          tenetur quia, cum atque voluptatibus quidem! Voluptatem, magni
-          dolores. Culpa, facere. Vitae sit aperiam dolores cumque nesciunt
-          voluptatum. Excepturi nulla quibusdam amet sequi ut porro, aliquid non
-          molestias eos asperiores corporis sed eum similique ea, suscipit fugit
-          aliquam ullam consequuntur voluptates sunt quasi impedit eius vero!
-        </p>
+        <p>{room.description}</p>
         <div className="text-[1rem]">
           <span className="font-semibold">Price : </span>
-          1000 /- per night
+          {room.price} /- per night
         </div>
         <div className="text-[1rem]">
           <span className="font-semibold">Number of Days : </span>
@@ -106,7 +85,7 @@ const RoomDialog = ({ dateDiff }) => {
         </div>
         <div className="text-[1rem]">
           <span className="font-semibold">Total cost : </span>
-          {1000 * dateDiff} /-
+          {room.price * dateDiff} /-
         </div>
         <DialogFooter>
           <Button

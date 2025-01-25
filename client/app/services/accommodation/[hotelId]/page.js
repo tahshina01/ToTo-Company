@@ -6,6 +6,8 @@ import Loading from "@/components/Loading";
 import RoomCard from "@/components/cards/RoomCard";
 import { DatePicker } from "antd";
 const { RangePicker } = DatePicker;
+import axios from "axios";
+import { usePathname } from "next/navigation";
 
 const page = () => {
   const [showLoading, setShowLoading] = useState(false);
@@ -22,6 +24,81 @@ const page = () => {
     "Master suite",
     "Presidential suite",
   ];
+  const pathname = usePathname();
+  const [hotelRooms, setHotelRooms] = useState([]);
+  const [filteredRooms, setFilteredRooms] = useState([]);
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    const seconds = String(d.getSeconds()).padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const getRooms = async (fromDate, toDate) => {
+    try {
+      const token = localStorage.getItem("token");
+      const hotelId = pathname.split("/").pop();
+
+      // Convert dates to the expected format
+      const formattedFromDate = formatDate(fromDate);
+      const formattedToDate = formatDate(toDate);
+
+      setFromDate(formattedFromDate);
+      setToDate(formattedToDate);
+
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/getUnbookedRooms?hotelId=${hotelId}&fromDate=${formattedFromDate}&toDate=${formattedToDate}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setShowLoading(false);
+        if (response.data.length === 0) {
+          setMessage("No rooms found for this hotel");
+        }
+        setHotelRooms(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (roomType !== "") {
+      if (roomType === "Single") {
+        setFilteredRooms(
+          hotelRooms.filter((room) => room.roomType === "SINGLE")
+        );
+      } else if (roomType === "Double") {
+        setFilteredRooms(
+          hotelRooms.filter((room) => room.roomType === "DOUBLE")
+        );
+      } else if (roomType === "Triple") {
+        setFilteredRooms(
+          hotelRooms.filter((room) => room.roomType === "TRIPLE")
+        );
+      } else if (roomType === "Master suite") {
+        setFilteredRooms(
+          hotelRooms.filter((room) => room.roomType === "MASTER_SUITE")
+        );
+      } else {
+        setFilteredRooms(
+          hotelRooms.filter((room) => room.roomType === "PRESIDENTIAL_SUITE")
+        );
+      }
+    } else {
+      setFilteredRooms(hotelRooms);
+    }
+  }, [hotelRooms, roomType]);
 
   const handleDateChange = (dates) => {
     console.log(dates);
@@ -43,12 +120,11 @@ const page = () => {
       setMessage("Invalid date");
       return;
     }
-    setFromDate(dates[0]);
-    setToDate(dates[1]);
     setMessage("");
     const msInDay = 24 * 60 * 60 * 1000; // Milliseconds in a day
     const differenceInDays = Math.round((dates[1].$d - dates[0].$d) / msInDay);
     setDateDiff(differenceInDays + 1);
+    getRooms(dates[0].$d.toISOString(), dates[1].$d.toISOString());
   };
 
   useEffect(() => {
@@ -86,13 +162,17 @@ const page = () => {
       </div>
       {message === "" && (
         <div className={`px-4 py-5 max-w-[1050px] mx-auto`}>
-          <RoomCard dateDiff={dateDiff} />
-          <div className="mb-5" />
-          <RoomCard dateDiff={dateDiff} />
-          <div className="mb-5" />
-          <RoomCard dateDiff={dateDiff} />
-          <div className="mb-5" />
-          <RoomCard dateDiff={dateDiff} />
+          {filteredRooms.length !== 0 &&
+            filteredRooms.map((room) => (
+              <div key={room.id} className="w-full flex justify-center">
+                <RoomCard
+                  room={room}
+                  dateDiff={dateDiff}
+                  fromDate={fromDate}
+                  toDate={toDate}
+                />
+              </div>
+            ))}
         </div>
       )}
       {message !== "" && (

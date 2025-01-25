@@ -1,9 +1,6 @@
 package com.example.travelApp.services;
 
-import com.example.travelApp.dto.GetRoomDto;
-import com.example.travelApp.dto.HotelDto;
-import com.example.travelApp.dto.RegHotelDto;
-import com.example.travelApp.dto.RoomDto;
+import com.example.travelApp.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,4 +21,8 @@ public interface HotelService {
     ResponseEntity<List<GetRoomDto>> getRoomsByHotelId(int hotelId);
 
     ResponseEntity<String> editRoom(List<MultipartFile> documents, RoomDto roomDto) throws IOException;
+
+    ResponseEntity<List<GetRoomDto>> getUnbookedRooms(int hotelId, String fromDate, String toDate);
+
+    ResponseEntity<String> booking(BookingDto bookingDto);
 }

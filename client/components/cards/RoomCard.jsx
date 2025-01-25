@@ -6,25 +6,48 @@ import RoomDialog from "@/components/dialogs/RoomDialog";
 import axios from "axios";
 import { usePathname } from "next/navigation";
 import AddRoomDialog from "@/components/dialogs/AddRoomDialog";
+import { jwtDecode } from "jwt-decode";
 
-const RoomCard = ({ dateDiff, room }) => {
+const RoomCard = ({ dateDiff, room, fromDate, toDate }) => {
   const pathname = usePathname();
   const dialogRef = useRef(null);
 
   const handlePayment = async () => {
+    const hotelId = pathname.split("/").pop();
+    const totalAmount = dateDiff * 1000; // Convert to cents
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/payment`,
-        { amount: dateDiff * 1000 },
+      const userId = jwtDecode(token).sub;
+      const dataToSend = {
+        hotelId,
+        roomId: room.id,
+        fromDate,
+        toDate,
+        userId,
+        totalAmount,
+      };
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/booking`,
+        dataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      if (response.status === 200) {
-        window.location.href = response.data;
+      if (res.status === 200) {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/hotel/payment`,
+          { amount: dateDiff * 1000 },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          window.location.href = response.data;
+        }
       }
     } catch (error) {
       console.log(error);
@@ -71,7 +94,7 @@ const RoomCard = ({ dateDiff, room }) => {
         </p>
         <div className="card-actions justify-end gap-12">
           {!pathname.includes("/yourHotels") && (
-            <RoomDialog dateDiff={dateDiff} />
+            <RoomDialog dateDiff={dateDiff} room={room} />
           )}
           {!pathname.includes("/yourHotels") && (
             <Button className="font-bold" onClick={handlePayment}>

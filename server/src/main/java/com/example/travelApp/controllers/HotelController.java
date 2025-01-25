@@ -103,6 +103,11 @@ public class HotelController {
         return hotelService.getRoomsByHotelId(hotelId);
     }
 
+    @GetMapping("/getUnbookedRooms")
+    public ResponseEntity<List<GetRoomDto>> getUnbookedRooms(@RequestParam int hotelId, @RequestParam String fromDate, @RequestParam String toDate) {
+        return hotelService.getUnbookedRooms(hotelId, fromDate, toDate);
+    }
+
     @GetMapping("/getHotels")
     public ResponseEntity<List<HotelDto>> getHotels() {
         return hotelService.getHotels();
@@ -116,5 +121,10 @@ public class HotelController {
     @PostMapping("/payment")
     ResponseEntity<String> payment(@RequestBody Payment payment) throws StripeException {
         return ResponseEntity.ok(paymentService.createPaymentLink(payment.getAmount()));
+    }
+
+    @PostMapping("/booking")
+    ResponseEntity<String> booking(@RequestBody BookingDto bookingDto) {
+        return hotelService.booking(bookingDto);
     }
 }
