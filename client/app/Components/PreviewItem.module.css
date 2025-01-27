@@ -1,0 +1,26 @@
+.previewItem {
+  width: 100%;
+  text-align: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.fileInfo {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6.5px;
+}
+.filePreview {
+  margin-top: 5px;
+}
+.filePreview img,
+.filePreview video {
+  max-width: calc(100% - 10px);
+  margin-left: auto;
+  margin-right: auto;
+  border: 0.5px solid grey;
+  border-radius: 5px;
+}

@@ -1,0 +1,462 @@
+/* TravelPage.module.css */
+.pageContainer {
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+
+
+.heroSection {
+    background: linear-gradient(135deg,  #adafb0, #4221fa);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+}
+
+.heroSection h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.heroSection p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.searchContainer {
+    margin-top: -2rem;
+    padding: 0 2rem;
+    margin-bottom: 3rem;
+}
+
+.formWrapper {
+    background: white;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.inputGroup {
+    position: relative;
+}
+
+.inputGroup label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.inputGroup select,
+.inputGroup input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.inputGroup select:focus,
+.inputGroup input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.switchButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1.5rem;
+}
+
+.switchButton button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.switchButton button:hover {
+    background: #cbd5e0;
+    transform: rotate(180deg);
+}
+
+.pageTitle {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #333;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.input {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+.searchButton {
+    width: 100%;
+    padding: 1rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.searchButton:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.flightList {
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    margin: 2rem;
+}
+
+.results {
+    background-color: #333;
+    text-align: center;
+    gap: 1.5rem;
+    justify-content: center;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-top: 2rem;
+    padding: 5px;
+}
+.results h1 {
+    color: white; /* Set text color to white */
+    font-size: 2rem; /* Adjust font size */
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-right: 5px; /* Left-align the text */
+  }
+
+.resultsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.resultsContainer h1 {
+    font-size: 1.8rem;
+    color: #1a202c;
+    margin-bottom: 2rem;
+}
+.flightFilter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.noResults {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    margin: 5px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.flightGrid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+
+.flightCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.flightCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.airline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.routeInfo {
+    text-align: center;
+}
+
+.route {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.city {
+    font-weight: 500;
+    color: #2d3748;
+}
+
+.arrow {
+    color: #2563eb;
+}
+.date,
+.timeInfo,
+.duration,
+.type {
+    color: #525252;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.info {
+    text-align: center;
+    display: grid;
+    grid-auto-flow: column; /* Places elements in a row (side by side) */
+    align-items: center;    /* Vertically align items */
+    gap: 10px; 
+}
+
+.priceSection {
+    text-align: right;
+}
+
+.price {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+}
+
+.bookButton {
+    padding: 0.8rem 1.5rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bookButton:hover {
+    background: #1d4ed8;
+}
+.noResultsIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.noResults p {
+    color: #718096;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+    .formGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .heroSection h1 {
+        font-size: 2rem;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .switchButton {
+        display: none;
+    }
+
+    .flightCard {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .airline {
+        justify-content: center;
+    }
+
+    .priceSection {
+        text-align: center;
+    }
+}
+.container {
+    background-color: #e6ecf3;
+    border-radius: 1rem;
+    padding: 2rem;
+    color: rgb(0, 0, 0);
+}
+
+.priceHeader {
+    margin-bottom: 2rem;
+}
+
+.priceHeader h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.lowPrice {
+    color: #48bb78;
+    font-weight: bold;
+}
+
+.mediumPrice {
+    color: #ecc94b;
+    font-weight: bold;
+}
+
+.highPrice {
+    color: #e53e3e;
+    font-weight: bold;
+}
+
+.priceRange {
+    margin-top: 1rem;
+}
+
+.infoIcon {
+    margin-left: 0.5rem;
+    color: #9ca3af;
+    cursor: help;
+}
+
+.priceIndicator {
+    margin-top: 2rem;
+}
+
+.rangeBar {
+    height: 8px;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    margin-bottom: 0.5rem;
+}
+
+.lowRange {
+    flex: 1;
+    background: #10b981;
+    border-radius: 4px 0 0 4px;
+}
+
+.mediumRange {
+    flex: 1;
+    background: #f59e0b;
+}
+
+.highRange {
+    flex: 1;
+    background: #ef4444;
+    border-radius: 0 4px 4px 0;
+}
+
+.pricePointer {
+    position: absolute;
+    top: -25px;
+    transform: translateX(-50%);
+}
+
+.pointerLabel {
+    background: #60a5fa;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.rangeLabels {
+    display: flex;
+    justify-content: space-between;
+    color: #3d3d3d;
+    font-size: 0.875rem;
+}
+
+.chartSection {
+    margin-top: 3rem;
+}
+
+.chartContainer {
+    height: 300px;
+    margin-top: 1rem;
+}
+
+.chartSection {
+    margin-top: 3rem;
+    align-content: center;
+    margin: 5px;
+}
+.graphContainer {
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

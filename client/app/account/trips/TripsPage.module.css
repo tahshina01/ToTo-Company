@@ -1,0 +1,475 @@
+/* app/account/trips/Trips.module.css */
+.tripsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+/* styles/Ticket.module.css */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8fafc;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+  
+  .ticket {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 700px;
+    padding: 32px;
+    transition: transform 0.3s ease;
+  }
+  
+  .ticket:hover {
+    transform: translateY(-5px);
+  }
+  
+  .airline_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+  
+  .logo_section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .airline_logo {
+    background: linear-gradient(135deg, #0052cc, #1a73e8);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .airline_info h1 {
+    margin: 0;
+    color: #1e293b;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .type {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .price_tag {
+    text-align: right;
+  }
+  
+  .price_tag span {
+    color: #64748b;
+    font-size: 14px;
+  }
+  
+  .price_tag h2 {
+    color: #0052cc;
+    font-size: 32px;
+    margin: 4px 0 0;
+  }
+  
+  .flight_route {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 40px 0;
+  }
+  
+  .route_info {
+    text-align: center;
+  }
+  
+  .city_code {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .route_info h2 {
+    margin: 8px 0;
+    color: #1e293b;
+    font-size: 20px;
+  }
+  
+  .route_info p {
+    margin: 0;
+    color: #64748b;
+    font-size: 16px;
+  }
+  
+  .flight_path {
+    flex: 1;
+    margin: 0 32px;
+  }
+  
+  .duration {
+    text-align: center;
+  }
+  
+  .duration span {
+    color: #64748b;
+    font-size: 14px;
+  }
+  
+  .plane_line {
+    position: relative;
+    margin: 16px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .plane_line::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e2e8f0;
+    z-index: 1;
+  }
+  
+  .dot {
+    width: 8px;
+    height: 8px;
+    background: #0052cc;
+    border-radius: 50%;
+    z-index: 2;
+  }
+  
+  .plane_icon {
+    background: white;
+    padding: 8px;
+    z-index: 2;
+    transform: rotate(90deg);
+    font-size: 20px;
+  }
+  
+  .details {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 24px;
+    padding: 32px 0;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .detail_item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .detail_icon {
+    font-size: 24px;
+    color: #64748b;
+  }
+  
+  .detail_item span {
+    color: #64748b;
+    font-size: 14px;
+  }
+  
+  .detail_item h3 {
+    margin: 4px 0 0;
+    color: #1e293b;
+    font-size: 16px;
+  }
+  
+  .confirm_button {
+    margin-top: 32px;
+    width: 100%;
+    background: linear-gradient(135deg, #0052cc, #1a73e8);
+    border: none;
+    border-radius: 16px;
+    padding: 16px 32px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .confirm_button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 82, 204, 0.2);
+  }
+  
+  .button_icon {
+    font-size: 20px;
+  }
+  
+  @media (max-width: 640px) {
+    .ticket {
+      padding: 24px;
+    }
+  
+    .airline_header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+  
+    .price_tag {
+      text-align: left;
+      width: 100%;
+    }
+  
+    .flight_route {
+      flex-direction: column;
+      gap: 24px;
+    }
+  
+    .flight_path {
+      margin: 24px 0;
+      width: 100%;
+    }
+  
+    .details {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+.tripsHeader {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tripsHeader h1 {
+    font-size: 2.5rem;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.tripsHeader p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.tabsContainer {
+    margin-bottom: 2rem;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.tabButton {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #4a5568;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabButton.active {
+    background-color: #4299e1;
+    color: white;
+}
+
+.tripsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.tripCard {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.tripCard:hover {
+    transform: translateY(-5px);
+}
+
+.tripImage {
+    position: relative;
+    height: 200px;
+}
+
+.tripImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.confirmed {
+    background-color: #48bb78;
+}
+
+.pending {
+    background-color: #ecc94b;
+}
+
+.cancelled {
+    background-color: #f56565;
+}
+
+.completed {
+    background-color: #4299e1;
+}
+
+.tripContent {
+    padding: 1.5rem;
+}
+
+.tripContent h2 {
+    font-size: 1.5rem;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.tripDetails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detailItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a5568;
+}
+
+.icon {
+    font-size: 1.2rem;
+}
+
+.activities {
+    margin-bottom: 1.5rem;
+}
+
+.activities h3 {
+    font-size: 1.1rem;
+    color: #2d3748;
+    margin-bottom: 0.8rem;
+}
+
+.activityList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.activity {
+    background-color: #ebf4ff;
+    color: #4299e1;
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.cardActions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.viewButton, .editButton {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.viewButton {
+    background-color: #4299e1;
+    color: white;
+}
+
+.viewButton:hover {
+    background-color: #3182ce;
+}
+
+.editButton {
+    background-color: #edf2f7;
+    color: #4a5568;
+}
+
+.editButton:hover {
+    background-color: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+    .tripsContainer {
+        padding: 1rem;
+    }
+
+    .tripsHeader h1 {
+        font-size: 2rem;
+    }
+
+    .tabs {
+        flex-direction: column;
+        padding: 0.5rem;
+    }
+
+    .tabButton {
+        width: 100%;
+    }
+
+    .tripDetails {
+        grid-template-columns: 1fr;
+    }
+
+    .cardActions {
+        flex-direction: column;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .tripsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
